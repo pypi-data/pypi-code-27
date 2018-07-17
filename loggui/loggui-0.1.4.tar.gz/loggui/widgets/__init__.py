@@ -1,0 +1,1 @@
+from loggui.widgets.settings import LogSettings
