@@ -1,0 +1,8 @@
+residuemapping_filename="residue_mapping.txt"
+
+calc_contacts_logfilename="calc_contacts.log"
+calc_contacts_all_contact_featurization_foldername="all_contact_featurization"
+
+exposed_residues_logfilename="exposed_residues.log"
+sasa_benchmark_filename="SASA-benchmarks.txt"
+exposed_residues_sasa_featurization_foldername="sasa_featurization"
