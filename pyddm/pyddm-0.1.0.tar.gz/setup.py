@@ -1,0 +1,35 @@
+# Copyright 2018 Max Shinn <maxwell.shinn@yale.edu>
+#           2018 Norman Lam <norman.lam@yale.edu>
+# 
+# This file is part of PyDDM, and is available under the MIT license.
+# Please see LICENSE.txt in the root directory for more information.
+
+from setuptools import setup
+
+with open("ddm/_version.py") as f:
+    exec(f.read())
+
+setup(
+    name = 'pyddm',
+    version = __version__,
+    description = 'Extensible drift diffusion modeling for Python',
+    author = 'Max Shinn, Norman Lam',
+    author_email = 'maxwell.shinn@yale.edu',
+    maintainer = 'Max Shinn',
+    maintainer_email = 'maxwell.shinn@yale.edu',
+    license = 'MIT',
+    python_requires='>=3.5',
+    url='https://github.com/mwshinn/PyDDM',
+    packages = ['ddm', 'ddm.models'],
+    install_requires = ['numpy', 'scipy', 'matplotlib', 'paranoid-scientist >= 0.1.3'],
+    classifiers = [
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python :: 3',
+        'Topic :: Education :: Testing',
+        'Topic :: Scientific/Engineering',
+        'Topic :: Scientific/Engineering :: Physics',
+        'Topic :: Scientific/Engineering :: Medical Science Apps.',
+        'Topic :: Scientific/Engineering :: Bio-Informatics']
+)
