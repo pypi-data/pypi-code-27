@@ -1,0 +1,16 @@
+import os
+import shlex, subprocess
+import time
+
+def bridge(client_port, host_port, host, user, ipv="4"):
+    command="ssh -f -N -%s -L %s:localhost:%s %s@%s" % (ipv, client_port, host_port, user, host)
+    args=shlex.split(command)
+    result=subprocess.Popen(args)
+    time.sleep(1)
+    return result
+
+def kill(bridge):
+    command="kill %s" % bridge.pid
+    args=shlex.split(command)
+    result=subprocess.Popen(args)
+    return result
