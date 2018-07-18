@@ -1,0 +1,163 @@
+# coding=utf-8
+# Copyright 2018 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from __future__ import with_statement
+from __future__ import division
+from __future__ import absolute_import
+import pytest
+
+import cirq
+from cirq import ops
+from cirq.contrib.quirk.export_to_quirk import circuit_to_quirk_url
+
+
+def test_x_z_same_col():
+    a = cirq.NamedQubit(u'a')
+    b = cirq.NamedQubit(u'b')
+    circuit = cirq.Circuit.from_ops(cirq.X(a), cirq.Z(b))
+    assert circuit_to_quirk_url(circuit, escape_url=False) == u"""
+        http://algassert.com/quirk#circuit={"cols":[["X","Z"]]}
+    """.strip()
+    assert circuit_to_quirk_url(circuit) == (
+        u'http://algassert.com/quirk#circuit='
+        u'%7B%22cols%22%3A%5B%5B%22X%22%2C%22Z%22%5D%5D%7D')
+
+
+def test_x_cnot_split_cols():
+    a = cirq.NamedQubit(u'a')
+    b = cirq.NamedQubit(u'b')
+    c = cirq.NamedQubit(u'c')
+    circuit = cirq.Circuit.from_ops(cirq.CNOT(a, b), cirq.X(c))
+    assert circuit_to_quirk_url(circuit, escape_url=False) == u"""
+        http://algassert.com/quirk#circuit={"cols":[["•","X"],[1,1,"X"]]}
+    """.strip()
+
+
+def test_cz_cnot_split_cols():
+    a = cirq.NamedQubit(u'a')
+    b = cirq.NamedQubit(u'b')
+    c = cirq.NamedQubit(u'c')
+    circuit = cirq.Circuit.from_ops(cirq.CNOT(a, b), cirq.CZ(b, c))
+    assert circuit_to_quirk_url(circuit, escape_url=False) == u"""
+        http://algassert.com/quirk#circuit={"cols":[["•","X"],[1,"•","Z"]]}
+    """.strip()
+
+
+def test_various_known_gate_types():
+    a = cirq.NamedQubit(u'a')
+    b = cirq.NamedQubit(u'b')
+    circuit = cirq.Circuit.from_ops(
+        cirq.google.ExpWGate(axis_half_turns=0).on(a),
+        cirq.google.ExpWGate(axis_half_turns=0.5).on(a),
+        cirq.X(a),
+        cirq.X(a)**0.25,
+        cirq.X(a)**-0.5,
+        cirq.Z(a),
+        cirq.Z(a)**0.5,
+        cirq.Y(a),
+        cirq.Y(a)**-0.25,
+        cirq.RotYGate(half_turns=cirq.Symbol(u't')).on(a),
+        cirq.H(a),
+        cirq.measure(a),
+        cirq.measure(a, b, key=u'not-relevant'),
+        cirq.SWAP(a, b),
+        cirq.CNOT(a, b),
+        cirq.CNOT(b, a),
+        cirq.CZ(a, b),
+    )
+    assert circuit_to_quirk_url(circuit, escape_url=False) == u"""
+        http://algassert.com/quirk#circuit={"cols":[
+            ["X"],
+            ["Y"],
+            ["X"],
+            ["X^¼"],
+            ["X^-½"],
+            ["Z"],
+            ["Z^½"],
+            ["Y"],
+            ["Y^-¼"],
+            ["Y^t"],
+            ["H"],
+            ["Measure"],
+            ["Measure","Measure"],
+            ["Swap","Swap"],
+            ["•","X"],
+            ["X","•"],
+            ["•","Z"]]}
+    """.replace(u'\n', u'').replace(u' ', u'')
+
+
+def test_various_unknown_gate_types():
+    a = cirq.NamedQubit(u'a')
+    b = cirq.NamedQubit(u'b')
+    circuit = cirq.Circuit.from_ops(
+        cirq.X(a)**(1/5),
+        cirq.Y(a)**(1/5),
+        cirq.Z(a)**(1/5),
+        cirq.CZ(a, b)**(1/5),
+        cirq.google.ExpWGate(axis_half_turns=0.25)(a),
+        cirq.google.ExpWGate(half_turns=1, axis_half_turns=cirq.Symbol(u'r'))(a)
+    )
+    assert circuit_to_quirk_url(circuit,
+                                escape_url=False,
+                                prefer_unknown_gate_to_failure=True) == u"""
+        http://algassert.com/quirk#circuit={"cols":[
+            [{"id":"?",
+              "matrix":"{{0.904508+0.293893i, 0.095492-0.293893i},
+                         {0.095492-0.293893i, 0.904508+0.293893i}}"}],
+            [{"id":"?",
+              "matrix":"{{0.904508+0.293893i, 0.293893+0.095492i},
+                         {-0.293893-0.095492i, 0.904508+0.293893i}}"}],
+            [{"id":"?",
+              "matrix":"{{1, 0},
+                         {0, 0.809017+0.587785i}}"}],
+            ["UNKNOWN", "UNKNOWN"],
+            [{"id":"?",
+              "matrix":"{{0, 0.707107+0.707107i},
+                         {0.707107-0.707107i, 0}}"}],
+            ["UNKNOWN"]
+        ]}
+    """.replace(u'\n', u'').replace(u' ', u'')
+
+
+def test_unrecognized_single_qubit_gate_with_matrix():
+    a = cirq.NamedQubit(u'a')
+    circuit = cirq.Circuit.from_ops(
+        cirq.X(a)**0.2731,
+    )
+    assert circuit_to_quirk_url(circuit, escape_url=False) == u"""
+        http://algassert.com/quirk#circuit={"cols":[[{
+            "id":"?",
+            "matrix":"{
+                {0.826988+0.378258i, 0.173012-0.378258i},
+                {0.173012-0.378258i, 0.826988+0.378258i}
+            }"}]]}
+    """.replace(u'\n', u'').replace(u' ', u'')
+
+
+def test_unknown_gate():
+    class UnknownGate(ops.Gate):
+        pass
+    a = cirq.NamedQubit(u'a')
+    circuit = cirq.Circuit.from_ops(UnknownGate()(a))
+    with pytest.raises(TypeError):
+        _ = circuit_to_quirk_url(circuit)
+    with pytest.raises(TypeError):
+        _ = circuit_to_quirk_url(circuit, escape_url=False)
+    assert circuit_to_quirk_url(circuit,
+                                prefer_unknown_gate_to_failure=True,
+                                escape_url=False) == u"""
+        http://algassert.com/quirk#circuit={"cols":[["UNKNOWN"]]}
+    """.strip()
