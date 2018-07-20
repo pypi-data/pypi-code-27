@@ -1,0 +1,101 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+from setuptools import setup
+from codecs import open
+#from os import path
+
+#here = path.abspath(path.dirname(__file__))
+
+#with open(path.join(here, 'requirements.txt')) as f:
+#    requirements = f.readlines()
+
+setup(
+    name='ch_frb_wview',
+    version='0.5.0',
+    description='Web Application to operate the FRB L1 system.'
+,
+
+    author='Dustin Lang, Chitrang Patel',
+    author_email='chitrang.patel@mail.mcgill.ca',
+    url="https://github.com/CHIMEFRB/frb_monitoring.git",
+    packages= ['ch_frb_wview'],
+    package_data={'': ['ch_frb_wview.service',
+                       'Pipfile',
+                       'README.md',
+                       'ch_frb_wview/config/l1_production_8beam_webapp.yaml',
+                       'ch_frb_wview/static/d3.min.js',
+                       'ch_frb_wview/static/fullcalendar.css',
+                       'ch_frb_wview/static/fullcalendar.min.js',
+                       'ch_frb_wview/static/fullcalendar.print.css',
+                       'ch_frb_wview/static/jquery.js',
+                       'ch_frb_wview/static/moment.min.js', 
+                       'ch_frb_wview/static/bootstrap-4/css/*.css', 
+                       'ch_frb_wview/static/bootstrap-4/css/*.map', 
+                       'ch_frb_wview/static/bootstrap-4/js/*.map', 
+                       'ch_frb_wview/static/bootstrap-4/js/*.js', 
+                       'ch_frb_wview/templates/*.html',
+                       'ch_frb_wview/templates/*.js',
+                       'ch_frb_wview/templates/includes/*.html',
+                 ]},
+    #py_modules=['webapp', 'chime_frb_operations', 'chlog_database', 'cnc_ssh', 'cnc_client'],
+    include_package_data=True,
+    install_requires=['flask',
+                      'pyyaml',
+                      'msgpack',
+                      'numpy',
+                      'sqlalchemy',
+                      'passlib',
+                      'zmq',
+                      'scipy',
+                      'requests',
+                      'matplotlib']
+)
+                      # 'ch_frb_wview/static/bootstrap-4/css/bootstrap.css', 
+                      # 'ch_frb_wview/static/bootstrap-4/css/bootstrap-formhelpers.min.css', 
+                      # 'ch_frb_wview/static/bootstrap-4/css/bootstrap-grid.min.css', 
+                      # 'ch_frb_wview/static/bootstrap-4/css/bootstrap.min.css.map', 
+                      # 'ch_frb_wview/static/bootstrap-4/css/bootstrap-reboot.min.css', 
+                      # 'ch_frb_wview/static/bootstrap-4/css/bootstrap.css.map', 
+                      # 'ch_frb_wview/static/bootstrap-4/css/bootstrap-grid.css', 
+                      # 'ch_frb_wview/static/bootstrap-4/css/bootstrap-grid.min.css.map', 
+                      # 'ch_frb_wview/static/bootstrap-4/css/bootstrap-reboot.css', 
+                      # 'ch_frb_wview/static/bootstrap-4/css/bootstrap-reboot.min.css.map', 
+                      # 'ch_frb_wview/static/bootstrap-4/css/bootstrap-formhelpers.css', 
+                      # 'ch_frb_wview/static/bootstrap-4/css/bootstrap-grid.css.map', 
+                      # 'ch_frb_wview/static/bootstrap-4/css/bootstrap.min.css', 
+                      # 'ch_frb_wview/static/bootstrap-4/css/bootstrap-reboot.css.map', 
+                      # 'ch_frb_wview/static/bootstrap-4/js/bootstrap.bundle.js',
+                      # 'ch_frb_wview/static/bootstrap-4/js/bootstrap.bundle.min.js',
+                      # 'ch_frb_wview/static/bootstrap-4/js/bootstrap-formhelpers.js',
+                      # 'ch_frb_wview/static/bootstrap-4/js/bootstrap.js.map',
+                      # 'ch_frb_wview/static/bootstrap-4/js/bootstrap.min.js.map',
+                      # 'ch_frb_wview/static/bootstrap-4/js/bootstrap.bundle.js.map',
+                      # 'ch_frb_wview/static/bootstrap-4/js/bootstrap.bundle.min.js.map',
+                      # 'ch_frb_wview/static/bootstrap-4/js/bootstrap.js',
+                      # 'ch_frb_wview/static/bootstrap-4/js/bootstrap.min.js',
+                      # 'ch_frb_wview/templates/strip-chart.js',
+                      # 'ch_frb_wview/templates/acq_details.html',
+                      # 'ch_frb_wview/templates/acq_history.html',
+                      # 'ch_frb_wview/templates/acq.html',
+                      # 'ch_frb_wview/templates/diagnostics.html',
+                      # 'ch_frb_wview/templates/home.html',
+                      # 'ch_frb_wview/templates/index-new.html',
+                      # 'ch_frb_wview/templates/index.html',
+                      # 'ch_frb_wview/templates/index-newer.html',
+                      # 'ch_frb_wview/templates/l1-logs-stdout.html',
+                      # 'ch_frb_wview/templates/l0-node-map.html',
+                      # 'ch_frb_wview/templates/l1-logs-recent.html',
+                      # 'ch_frb_wview/templates/login.html',
+                      # 'ch_frb_wview/templates/l1-service.html',
+                      # 'ch_frb_wview/templates/layout.html',
+                      # 'ch_frb_wview/templates/operations.html',
+                      # 'ch_frb_wview/templates/node-service.html',
+                      # 'ch_frb_wview/templates/node-status.html',
+                      # 'ch_frb_wview/templates/packets-l1-d3.html',
+                      # 'ch_frb_wview/templates/packets-d3.html',
+                      # 'ch_frb_wview/templates/packets-l0-d3.html',
+                      # 'ch_frb_wview/templates/sign_up_for_observations.html',
