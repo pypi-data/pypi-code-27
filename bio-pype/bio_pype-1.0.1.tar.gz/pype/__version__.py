@@ -1,0 +1,6 @@
+VERSION = "1.0.1"
+PIPELINES_API = "1.0.0"
+DATE = "19 July 2018"
+AUTHOR = "Favero Francesco"
+MAIL = "francesco.favero@bric.ku.dk"
+WEBSITE = "http://bio-pype.readthedocs.io"
