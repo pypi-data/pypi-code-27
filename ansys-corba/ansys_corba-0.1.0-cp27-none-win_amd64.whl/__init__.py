@@ -1,0 +1,20 @@
+import sys
+import ctypes
+import os
+
+# add this directory to the system path
+path = os.path.dirname(os.path.realpath(__file__))
+sys.path.insert(0, path)
+
+# add shared libaries to the path
+#libpath = os.path.join(path, 'omniORB')
+# libpath = path
+
+#libs = ['omnithread40_vc9_rt.dll', 'omniorb422_vc9_rt.dll']   # windows
+#for lib in libs:
+#    libfile = os.path.join(libpath, lib)
+#     if os.path.isfile(libfile):
+ #        ctypes.cdll.LoadLibrary(libfile)
+
+from omniORB import CORBA
+import AAS_CORBA
