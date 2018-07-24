@@ -1,0 +1,5 @@
+"""
+    @author: oxhagolli
+"""
+
+name = "pyphys"
