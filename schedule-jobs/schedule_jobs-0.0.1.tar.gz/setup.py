@@ -1,0 +1,25 @@
+import setuptools
+
+with open("README.md", "r") as fp:
+    long_description = fp.read()
+
+setuptools.setup(
+    name="schedule_jobs",
+    version="0.0.1",
+    author="Tsotsi",
+    author_email="tsotsi@tsotsi.cn",
+    description="A Schedule Jobs Library",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="",
+    packages=setuptools.find_packages(exclude=['test*', 'jobs', '.idea']),
+    python_requires="~=3.6",
+    classifiers=(
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: MacOS",
+        "Operating System :: POSIX :: BSD",
+        "Operating System :: POSIX :: Linux",
+    )
+)
