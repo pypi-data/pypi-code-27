@@ -1,0 +1,5 @@
+US_PROD="https://rest.zuora.com"
+US_SANDBOX="https://rest.apisandbox.zuora.com"
+US_PT="https://rest.pt1.zuora.com"
+EU_PROD="https://rest.eu.zuora.com"
+EU_SANDBOX="https://rest.sandbox.eu.zuora.com"
