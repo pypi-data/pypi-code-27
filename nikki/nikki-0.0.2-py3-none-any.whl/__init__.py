@@ -1,0 +1,5 @@
+__version__ = "0.0.2"
+__name__ = "nikki"
+__author__ = "win32gg"
+__url__ = "https://github.com/WIN32GG/s-log"
+__email__ = "gregor.jouet@laposte.net"
