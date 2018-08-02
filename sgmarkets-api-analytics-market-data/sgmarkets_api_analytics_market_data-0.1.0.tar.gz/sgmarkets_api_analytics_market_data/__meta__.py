@@ -1,0 +1,41 @@
+
+__name__ = 'sgmarkets_api_analytics_market_data'
+name_url = __name__.replace('_', '-')
+
+__version__ = '0.1.0'
+__description__ = 'sgmarket api analytics market data helper'
+__long_description__ = 'See repo README'
+__author__ = 'sgmarkets'
+__author_email__ = 'kevin.ferret@sgcib.com, olivier.borderies@gmail.com'
+__url__ = 'https://gitlab.com/{}/{}'.format(__author__,
+                                            name_url)
+__download_url__ = 'https://gitlab.com/{}/{}/repository/archive.tar.gz?ref={}'.format(__author__,
+                                                                                      name_url,
+                                                                                      __version__)
+__keywords__ = ['sgmarkets', 'api', 'market data']
+__license__ = 'MIT'
+__classifiers__ = ['Development Status :: 4 - Beta',
+                   'License :: OSI Approved :: MIT License',
+                   'Programming Language :: Python :: 3.5',
+                   'Programming Language :: Python :: 3.6',
+                   'Programming Language :: Python :: 3.7'
+                   ]
+__include_package_data__ = True
+__package_data__ = {
+    'sgmarkets_api_analytics_market_data':
+        [
+            'markdown/info.md',
+            # 'markdown/field_values.md',
+            # 'markdown/instruments.md',
+            # 'markdown/intraday_quotes.md',
+            # 'markdown/last_quotes.md',
+            # 'markdown/live_quotes.md',
+            # 'markdown/product_fields.md',
+            # 'markdown/product.md',
+            # 'markdown/quotas.md',
+            # 'markdown/quotes.md',
+            # 'markdown/snapshot_quotes.md',
+         ],
+}
+__zip_safe__ = False
+__entry_points__ = {}
