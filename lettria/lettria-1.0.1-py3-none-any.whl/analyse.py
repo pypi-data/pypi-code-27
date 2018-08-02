@@ -1,0 +1,22 @@
+class Extract:
+    def NLP(json):
+        return json['NLP']
+    def NER(json):
+        return json['NER']
+    def NLU(json):
+        return json['NLU']
+    def Sentiment(json):
+        return json['Sentiment']
+    def emoticons(json):
+        return json['emoticons']
+    def language_used(json):
+        return json['language_used']
+    def postagger(json):
+        return json['postagger']
+    def tokenizer(json):
+        p = [ item[0] for item in json['postagger']]
+        return p
+    def Entities_numeral(json):
+        return json['Entities_numeral']
+    def parser_dependency(json):
+        return json['parser_dependency']
