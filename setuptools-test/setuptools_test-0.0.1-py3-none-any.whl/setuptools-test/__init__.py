@@ -1,0 +1,1 @@
+name = "setuptools_test"
