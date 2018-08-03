@@ -1,0 +1,8 @@
+__title__ = 'ApiMeter'
+__description__ = 'One-stop solution for HTTP(S) testing.'
+__url__ = 'https://git.umlife.net/qa/YmApiMeter'
+__version__ = '1.1.0'
+__author__ = 'tester'
+__author_email__ = 'tester@youmi.net'
+__license__ = 'MIT'
+__cake__ = u'\u2728 \U0001f370 \u2728'
