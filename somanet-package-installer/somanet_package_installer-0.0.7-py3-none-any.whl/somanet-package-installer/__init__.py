@@ -1,0 +1,1 @@
+name = 'somanet-package-installer'
