@@ -1,0 +1,102 @@
+from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+
+from builtins import super
+from future import standard_library
+standard_library.install_aliases()
+from os import getpid, kill
+from sqlite3 import OperationalError
+from time import sleep
+
+from .utils import format_epoch, process_exists
+from .sqlite import SqliteSupport
+
+
+"""
+Locking of named resources via the database.
+"""
+
+
+# name used for locking the mseed data file
+MSEED = "mseed"
+
+
+class DatabaseBasedLockFactory(SqliteSupport):
+    """
+    Support locking against some string (eg name of file) via the database.
+    We're trying to avoid file locking because of NFS and cross-platform issues, so use this instead.
+    A new instance of the factory must be generated for each kind of resource locked.  Multiple instances
+    can exist for the same kind of resource (in different processes) - that's the whole point.
+    """
+
+    def __init__(self, config, name):
+        super().__init__(config)
+        self._table_name = 'rover_lock_%s' % name
+        self._config = config
+        self._create_lock_table()
+
+    def _create_lock_table(self):
+        self.execute('''create table if not exists %s (
+                           id integer primary key autoincrement,
+                           pid integer unique,
+                           key text unique,
+                           creation_epoch int default (cast(strftime('%%s', 'now') as int))
+        )''' % self._table_name)
+
+    def lock(self, key):
+        return LockContext(self._config, self._table_name, key)
+
+
+class LockContext(SqliteSupport):
+    """
+    Both context and acquire/release syntax are supported here.
+    """
+
+    def __init__(self, config, table, key):
+        super().__init__(config)
+        self._table = table
+        self._key = key
+
+    def __enter__(self):
+        self.acquire()
+
+    def acquire(self):
+        while True:
+            try:
+                # very careful with transactions here - want entire process to be in a single transaction
+                with self._db:  # commits or rolls back
+                    c = self._db.cursor()
+                    c.execute('begin')
+                    if not c.execute('select count(*) from %s where key = ?' % self._table, (self._key,)).fetchone()[0]:
+                        self._log.debug('Acquired lock on %s with %s' % (self._table, self._key))
+                        c.execute('insert into %s (pid, key) values (?, ?)' % self._table, (getpid(), self._key))
+                        return
+            except OperationalError:
+                pass  # database was locked
+            if not self._clean():
+                self._log.debug('Sleeping on lock %s with %s' % (self._table, self._key))
+                sleep(1)
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.release()
+        return False
+
+    def release(self):
+        self._log.debug('Releasing lock on %s with %s' % (self._table, self._key))
+        self.execute('delete from %s where key = ?' % self._table, (self._key,))
+
+    def _clean(self):
+        cleaned = [False]
+
+        def callback(row):
+            pid, key, epoch = row
+            if not process_exists(pid):
+                self._log.warn('Cleaning out old entry for PID %d on lock %s with %s (created %s)' % (
+                    pid, self._table, key, format_epoch(epoch)))
+                self.execute('delete from %s where key = ?' % self._table, (self._key,))
+                cleaned[0] = True
+
+        self.foreachrow('select pid, key, creation_epoch from %s' % self._table, tuple(), callback)
+        return cleaned[0]
